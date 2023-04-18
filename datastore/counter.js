@@ -26,6 +26,7 @@ const readCounter = (callback) => {
 };
 
 const writeCounter = (count, callback) => {
+  console.log( 'CONTER STRING')
   var counterString = zeroPaddedNumber(count);
   fs.writeFile(exports.counterFile, counterString, (err) => {
     if (err) {
@@ -40,9 +41,14 @@ const writeCounter = (count, callback) => {
 
 exports.getNextUniqueId = (callback) => {
   // counter = counter + 1;
+  // writeCounter(counter, callback)
   // return zeroPaddedNumber(counter);
-
-  readCounter((err, newCount)=>{writeCounter(newCount + 1,callback)})
+  readCounter((err, id)=>{
+    if (err) {
+      console.log(err)
+    } else {
+      writeCounter(id+1 ,callback)}
+    })
 };
 
 
@@ -97,4 +103,4 @@ exports.getNextUniqueId = (callback) => {
 
 // // Configuration -- DO NOT MODIFY //////////////////////////////////////////////
 
-// exports.counterFile = path.join(__dirname, 'counter.txt');
+exports.counterFile = path.join(__dirname, 'counter.txt');
