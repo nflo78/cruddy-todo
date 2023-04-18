@@ -2,22 +2,38 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('underscore');
 const counter = require('./counter');
+// const zeroPaddedNumber = require('./counter')
+const sprintf = require('sprintf-js').sprintf;
+
 
 var items = {};
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
+
 exports.create = (text, callback) => {
-  var id = counter.getNextUniqueId();
-  items[id] = text;
-  callback(null, { id, text });
+  counter.getNextUniqueId((err, id) => {
+      fs.writeFile(path.join(exports.dataDir, `${id}.txt`), text, ((err) => {
+        callback(null,  {id, text})
+      }));
+  })
 };
 
-exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
-  });
-  callback(null, data);
+const zeroPaddedNumber = (num) => {
+  return sprintf('%05d', num);
+};
+
+exports.readAll = (callback) => { //check if there is any data, if not pass errBack, if NO ERROR, pass null
+  fs.readdir(path.join(exports.dataDir), (err,items)=> {
+    var data = _.map(items, (text, id) => {
+      id = id +1
+      text = text.slice(0,-4)
+      id = zeroPaddedNumber(id)
+      return {text, id};
+    });
+    callback(null, data);
+    return data
+  })
 };
 
 exports.readOne = (id, callback) => {

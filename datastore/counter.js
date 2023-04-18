@@ -26,7 +26,6 @@ const readCounter = (callback) => {
 };
 
 const writeCounter = (count, callback) => {
-  console.log( 'CONTER STRING')
   var counterString = zeroPaddedNumber(count);
   fs.writeFile(exports.counterFile, counterString, (err) => {
     if (err) {
@@ -40,21 +39,16 @@ const writeCounter = (count, callback) => {
 // Public API - Fix this function //////////////////////////////////////////////
 
 exports.getNextUniqueId = (callback) => {
-  // counter = counter + 1;
-  // writeCounter(counter, callback)
-  // return zeroPaddedNumber(counter);
-  readCounter((err, id)=>{
-    if (err) {
-      console.log(err)
-    } else {
-      writeCounter(id+1 ,callback)}
-    })
-};
+  readCounter((err, id)=>{writeCounter(id+1 ,callback)})
+}
 
 
 
-// const fs = require('fs');
-// const path = require('path');
+
+
+
+        // const fs = require('fs');
+        // const path = require('path');
 // const sprintf = require('sprintf-js').sprintf; //property of sprintf file
 
 // var counter = 0;
