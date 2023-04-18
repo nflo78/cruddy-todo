@@ -37,12 +37,23 @@ exports.readAll = (callback) => { //check if there is any data, if not pass errB
 };
 
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  fs.readFile(path.join(exports.dataDir,`${id}.txt`), (err, text)=> {
+    // console.log(Number(text), 'DAYAAAAA')
+    if (err) {
+      callback(err, 0)
+    } else {
+      text = text.toString()
+      console.log({id, text})
+      callback(null, {id, text})
+    }
+  })
+
+  // var text = items[id];
+  // if (!text) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   callback(null, { id, text });
+  // }
 };
 
 exports.update = (id, text, callback) => {
